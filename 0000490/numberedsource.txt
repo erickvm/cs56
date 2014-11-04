@@ -1,0 +1,594 @@
+
+
+2012-03-17 17:19                src/NQuestion.java                Page 1
+
+
+    1	import java.io.BufferedReader;
+    2	import java.io.InputStreamReader;
+    3	import java.util.ArrayList;
+    4	import java.util.Scanner;
+    5	
+    6	
+    7	 /** 
+    8		NewQuestion class handles data from Question class
+    9		
+   10		@author Erick Valle and George Barrios
+   11		@version Conversion Quiz for CS56, Winter 2012
+   12	
+   13	 */
+   14	
+   15	public class NQuestion{
+   16	    
+   17	   
+   18	    // questions arrayList for Objects of type Question
+   19	    private ArrayList<Question> questions = new ArrayList<Question> ();
+   20	    // answers holds the answers that the user enters
+   21	    private ArrayList<String> answers = new ArrayList<String> ();
+   22	    // stringQues holds the string format of all questions created
+   23	    private ArrayList<String> stringQues = new ArrayList<String> ();
+   24	    // decimalNum holds the decimal numbers to used in th questions
+   25	    private ArrayList<Integer> decimalNum = new ArrayList<Integer>();
+   26	    // radix holds the radix values of the question
+   27	    private ArrayList<Integer>  radix = new ArrayList<Integer>(); 
+   28	    
+   29	    private int totalQuestions;
+   30	    // holds the amount of correct questions 
+   31	    private ArrayList<Integer> scoreArray = new ArrayList<Integer>();
+   32	
+   33	
+   34	    /**
+   35	     *  
+   36	     * @param numOfQuestions  numOfQuestions Number of Questions to create
+   37	     *  
+   38	     */
+   39	    
+   40	
+   41	    public NQuestion (int numOfQuestions ){
+   42		this.totalQuestions = numOfQuestions;
+   43	
+   44	    }
+   45	    
+   46	    public Question getQuesions(int index){
+   47		return this.questions.get(index);
+   48	    }
+   49	    
+   50	    public String getStringQues(int index){
+   51		return this.stringQues.get(index);
+   52	    }
+   53	    public int getDecimalNum(int index){
+   54		return this.decimalNum.get(index);
+   55	    }
+   56	    
+
+
+
+
+
+
+
+2012-03-17 17:19                src/NQuestion.java                Page 2
+
+
+   57	    public String getAnswers(int index){
+   58		return this.answers.get(index);
+   59	    }
+   60	    
+   61	    public void addAnswer(int index, String ans){
+   62		this.answers.add(index, ans);
+   63	    }
+   64	    public void setRadixValue(int radix) {
+   65		this.radix.add(radix);
+   66	
+   67	    }
+   68	
+   69	    public int getRadixValue(int index){
+   70		return this.radix.get(index);
+   71		
+   72	    }
+   73	    
+   74	    
+   75	
+   76	    
+   77	    public int getSize(){
+   78		return this.totalQuestions;
+   79	    }
+   80	    
+   81	
+   82	    
+   83	    
+   84	    public int getScore() {
+   85		return this.scoreArray.size();
+   86	    }
+   87	    public void makeQuestion(){
+   88		Question getValues = new Question();
+   89		this.questions.add(getValues);
+   90		String completeQuestion = getValues.generateQuestion();
+   91		this.stringQues.add(completeQuestion);
+   92		int valueToconvert = getValues.getNum();
+   93		this.decimalNum.add(valueToconvert);
+   94		int radiaxVa = getValues.getIntRadix();
+   95		this.setRadixValue(radiaxVa);
+   96		
+   97	    }
+   98	
+   99	   
+  100	    
+  101	    public void printQuestion() {
+  102		for(int numQues = 0; numQues < this.getSize(); numQues++){
+  103		    this.makeQuestion();
+  104		    
+  105		}
+  106	    }
+  107	    
+  108	   
+  109	    
+  110	    public String checkAnswers(int qs, String ans){
+  111		try {
+  112		    int radix = this.getRadixValue(qs);
+
+
+
+
+
+
+
+2012-03-17 17:19                src/NQuestion.java                Page 3
+
+
+  113		    int convertedInt = Integer.parseInt(ans, radix);
+  114	
+  115		
+  116		    String convertedAns = (new Integer(convertedInt)).toString();
+  117		    if ((this.decimalNum.get(qs) == convertedInt)){
+  118			
+  119			scoreArray.add(1);
+  120			return "Correct";
+  121		    }
+  122		    else 
+  123			return "Wrong";
+  124		}catch (NumberFormatException ex){
+  125		    return "Invalid";
+  126		}
+  127		
+  128	    }
+  129	
+  130	    public String scoreResults() {
+  131		double size = this.getSize();
+  132		double quesCorrect = this.getScore();
+  133		double score1 = (quesCorrect/size)*100.0;
+  134		float score2 = Math.round(score1);
+  135		
+  136		return ("Your score: " + score2 +"%");
+  137	    }
+  138	
+  139	
+  140	
+  141	  
+  142	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+2012-03-17 17:20                src/Question.java                 Page 1
+
+
+    1	import java.lang.Math;
+    2	
+    3	/** 
+    4		Question class 
+    5		
+    6		@author Erick Valle and George Barrios
+    7		@version Conversion Quiz for CS56, Winter 2012
+    8	
+    9	 */
+   10	
+   11	
+   12	public class Question {
+   13	    
+   14	    private int num;
+   15	    
+   16	    private String stringRadix;
+   17	    
+   18	    private int intRadix;
+   19	    
+   20	
+   21	    // No argument constructor 
+   22	   
+   23	    public Question(){
+   24	    
+   25	    }
+   26	    
+   27	    // Getters and Setters for our intance variables 
+   28	    
+   29	    public String getRadix(){
+   30		return this.stringRadix;
+   31	    }
+   32	    public void setRadix(String radix2){
+   33		this.stringRadix = radix2;
+   34	    }
+   35		
+   36	    public int getNum(){
+   37			return num;
+   38			}
+   39	    public void setNum(int x) {
+   40		this.num = x;
+   41			}
+   42	    
+   43	    public int getIntRadix() {
+   44		return this.intRadix;
+   45	    }
+   46	    
+   47	    public void setIntRadix(int x) {
+   48		this.intRadix = x;
+   49	    }
+   50	
+   51	    // Generates a random option to convert the number to.
+   52	    
+   53	    public void randomOption(){
+   54		int option = (int)(Math.random()*3);
+   55		
+   56		switch (option) {
+
+
+
+
+
+
+
+2012-03-17 17:20                src/Question.java                 Page 2
+
+
+   57		
+   58		case 0:
+   59		    this.setIntRadix(2);
+   60		    this.setRadix("Binary");
+   61		    break;
+   62		case 1:
+   63		    this.setIntRadix(8);
+   64		    this.setRadix("Octal");
+   65		    break;
+   66		case 2:
+   67		    this.setIntRadix(16);
+   68		    this.setRadix("Hexadecimal");
+   69		    break;
+   70				
+   71		}
+   72		
+   73	
+   74	    }
+   75		
+   76	    // Creates a random decimal to convert
+   77	    
+   78	    public void  randomNumber () {
+   79			num = (int)(Math.random()*100);
+   80			this.setNum(num);
+   81			}
+   82	    public String generateQuestion() {
+   83		
+   84		this.randomOption();
+   85		this.randomNumber();
+   86		int randomDecimal = this.getNum();
+   87		int radixInt = this.getIntRadix();
+   88		String radixString = this.getRadix();
+   89		 
+   90		return ("Convert " + randomDecimal + " to " + radixString);
+   91	    }
+   92	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+2012-03-17 17:05                 src/QuizGui.java                 Page 1
+
+
+    1	import java.awt.*;
+    2	import javax.swing.*;
+    3	import java.util.*;
+    4	import java.awt.event.*;
+    5	
+    6	
+    7	 /** 
+    8		GUI for Conversion Quiz
+    9		
+   10		@author Erick Valle and George Barrios
+   11		@version Conversion Quiz for CS56, Winter 2012
+   12	
+   13	 */
+   14	
+   15	public class QuizGui   {
+   16	    
+   17	    //JPanel mainPanel;
+   18	    JFrame theFrame;
+   19		
+   20		//Instances so the instance classes can work
+   21		
+   22		private JTextField[] questions;
+   23		
+   24		private JLabel[] answers;
+   25		
+   26		private JLabel[] askit;
+   27		
+   28		private NQuestion quiz;
+   29	        
+   30	        private JLabel score;
+   31	
+   32		
+   33		
+   34		//  -------------Main Method
+   35		
+   36	    public static void main (String [] args) { 
+   37		QuizGui quiz = new QuizGui();
+   38		quiz.buildQuiz();
+   39				
+   40		
+   41	    }
+   42	    
+   43	    
+   44		
+   45		public QuizGui(){
+   46			
+   47			questions = new JTextField[10];
+   48			
+   49			answers = new JLabel[10];
+   50			
+   51			askit = new JLabel[10];
+   52			
+   53			score =  new JLabel("");
+   54			
+   55			// Static index variable
+   56			int i;
+
+
+
+
+
+
+
+2012-03-17 17:05                 src/QuizGui.java                 Page 2
+
+
+   57			
+   58		
+   59			for (i=0; i<10; i++) {
+   60				questions[i] = new JTextField(20);
+   61				answers[i] = new JLabel("");
+   62				askit[i] = new JLabel("");
+   63			}
+   64			
+   65			
+   66			
+   67			
+   68			
+   69	
+   70			
+   71			
+   72			
+   73	
+   74			
+   75			
+   76			
+   77		}
+   78		
+   79		//---------method that builds the gui
+   80		
+   81	    public void buildQuiz(){ 
+   82		
+   83		//Makes the Questions	
+   84		quiz = new NQuestion(10);
+   85		quiz.printQuestion();
+   86			
+   87		//Builds the Frame	
+   88		theFrame = new JFrame("Conversion Quiz");
+   89		theFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+   90		BorderLayout layout = new BorderLayout();
+   91		JPanel background = new JPanel(layout);
+   92		background.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+   93		
+   94		int i;// Static index variable
+   95	
+   96		//Laysout the Labels
+   97		Box yesno = new Box(BoxLayout.Y_AXIS);	
+   98		for (i = 0; i<10; i++) {
+   99			yesno.add(answers[i]);
+  100			yesno.add(Box.createVerticalStrut(29));
+  101		}
+  102		
+  103		
+  104		
+  105	
+  106	
+  107		//----------Buttons for Check Answers and New Quiz-------
+  108		Box buttons = new Box(BoxLayout.X_AXIS);
+  109		JButton checkAns = new JButton("Check Answer");
+  110		checkAns.addActionListener(new MyAnswerListener() );// Check Answer Event Button
+  111		buttons.add(checkAns);
+  112		buttons.add(Box.createVerticalStrut(10));
+
+
+
+
+
+
+
+2012-03-17 17:05                 src/QuizGui.java                 Page 3
+
+
+  113		buttons.add(score);
+  114		buttons.add(Box.createVerticalStrut(10));
+  115		
+  116			
+  117		
+  118		JButton makeQuiz = new JButton("New Quiz");
+  119		makeQuiz.addActionListener(new MyMakeQuizListener());
+  120		buttons.add(makeQuiz);
+  121		;
+  122		
+  123		
+  124		
+  125	      
+  126	        	
+  127	  
+  128		// Layout TextFields for input
+  129		Box textFields = new Box(BoxLayout.Y_AXIS);
+  130		for (i = 0; i<10; i++) {
+  131			questions[i].setMaximumSize( questions[i].getPreferredSize() );
+  132			textFields.add(questions[i]);
+  133			textFields.add(Box.createVerticalStrut(25));
+  134		}	
+  135		
+  136	
+  137		
+  138		
+  139	    //Layout Labels that ask the quesstion
+  140		Box textLabel = new Box(BoxLayout.Y_AXIS);
+  141		for (i = 0; i<10; i++) {
+  142		askit[i].setText(quiz.getStringQues(i));
+  143		textLabel.add(askit[i]);
+  144		textLabel.add(Box.createVerticalStrut(28));
+  145		    	
+  146		}	
+  147		
+  148		
+  149		
+  150		
+  151		background.add(BorderLayout.WEST, textLabel);
+  152		background.add(BorderLayout.SOUTH, buttons);
+  153		background.add(BorderLayout.CENTER, textFields);
+  154		background.add(BorderLayout.EAST, yesno);
+  155			
+  156	
+  157	
+  158		
+  159		
+  160	    theFrame.getContentPane().add(background);
+  161		
+  162	    theFrame.setSize(600, 600);
+  163		
+  164		theFrame.setVisible(true);
+  165		
+  166		
+  167		
+  168	
+
+
+
+
+
+
+
+2012-03-17 17:05                 src/QuizGui.java                 Page 4
+
+
+  169	
+  170	
+  171	
+  172	
+  173	/*-----------------------EVENT HANDLING CLASSES HERE--------------*/
+  174	
+  175	
+  176	
+  177	}
+  178		
+  179		
+  180	    public class MyMakeQuizListener implements ActionListener {
+  181		public void actionPerformed(ActionEvent e){
+  182			
+  183			
+  184			theFrame.setVisible(false);
+  185			theFrame.dispose();
+  186			buildQuiz();
+  187			for (int i = 0; i<10; i++) {
+  188				answers[i].setText("");
+  189			}
+  190			for (int i = 0; i<10; i++) {
+  191			    questions[i].setText("");
+  192			}
+  193			score.setText("");
+  194			
+  195		}
+  196	    }
+  197	
+  198	    public class MyAnswerListener implements ActionListener {
+  199		    public void actionPerformed(ActionEvent ans){
+  200			
+  201				
+  202				for (int i = 0; i<10; i++) {
+  203					// Gets the index question number and gets the text from the  text field
+  204					//to check if the match, if not, check answer returns "Wrong"
+  205					answers[i].setText(quiz.checkAnswers(i,questions[i].getText()));
+  206					
+  207				}
+  208				score.setText(quiz.scoreResults());
+  209				
+  210				
+  211				
+  212				
+  213		}
+  214	    
+  215	    }
+  216	}
+  217	
+  218	    
+  219	
+
+
+
+
+
+
+
+
+
+

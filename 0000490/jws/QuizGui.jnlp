@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="0.2 1.0" codebase="http://www.cs.ucsb.edu/~evalle/cs56/W12/issues/0000490/jws" href="QuizGui.jnlp">
+ <information>
+   <title>UCSB CS56 W12 0000490 Erick Valle and George Barrios QuizGui</title>
+   <vendor>UCSB CS56</vendor>
+   <homepage href="." />
+   <description>Conversion Quiz</description>
+  <icon href="cs56.png" />
+  <offline-allowed />
+ </information>
+ <resources>
+  <j2se version="1.3+" />
+  <jar href="0000490.jar" />
+ </resources>
+ <application-desc main-class="QuizGui"/>
+</jnlp>
